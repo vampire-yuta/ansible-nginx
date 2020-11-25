@@ -1,0 +1,36 @@
+- hosts: servers
+  tasks:
+    - name: install the latest version of nginx
+      yum:
+        name: nginx
+        state: latest
+
+    - name: put cert
+      copy:
+        src: files/server.crt
+        dest: /etc/nginx/server.crt
+        owner: root
+        group: root
+        mode: "u=rw,g=r,o=r"
+
+    - name: put key
+      copy:
+        src: files/server.key.nopass
+        dest: /etc/nginx/server.key
+        owner: root
+        group: root
+        mode: "u=rw,g=r,o=r"
+
+    - name: put ssl.conf
+      copy:
+        src: files/ssl.conf
+        dest: /etc/nginx/conf.d/ssl.conf
+        owner: root
+        group: root
+        mode: "u=rw,g=r,o=r"
+
+    - name: nginx is running and enabled
+      service:
+        name: nginx
+        state: started
+        enabled: yes
